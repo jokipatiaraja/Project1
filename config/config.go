@@ -8,8 +8,8 @@ import (
 )
 
 
-func initDB() (*gorm.DB, error){
-	dsn := "root:@tcp(localhost:3306)/database_toko?charset=utf8mb4&parseTime=True&loc=Local"
+func InitDB() (*gorm.DB, error){
+	dsn := "root:@tcp(localhost:3306)/db_tokoku?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("something happend", err)
