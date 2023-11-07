@@ -11,15 +11,12 @@ type AuthSystem struct {
 	DB *gorm.DB
 }
 
-func (as *AuthSystem) add() (model.Customer, bool){
+func (as *AuthSystem) Add(userId uint) (model.Customer, bool){
 	var newCustomer = new(model.Customer)
 
 	fmt.Print("Masukkan Nama		:")
 	fmt.Scanln(&newCustomer.Name)
-	fmt.Print("Masukkan User Name	:")
-	fmt.Scanln(&newCustomer.UserName)
-	fmt.Print("Masukkan Password	:")
-	fmt.Scanln(&newCustomer.Password)
+	newCustomer.UserID = userId
 
 	err := as.DB.Create(newCustomer).Error
 	if err != nil {

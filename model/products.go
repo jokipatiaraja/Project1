@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Product struct {
 	gorm.Model
 	Name string
-	Stock *uint16
+	Stock uint
 	Price uint
 	UserID uint
 }

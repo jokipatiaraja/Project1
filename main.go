@@ -3,7 +3,10 @@ package main
 import (
 	"Project1/auth"
 	"Project1/config"
+	"Project1/customer"
 	"Project1/model"
+	"Project1/product"
+	"Project1/transaction"
 	"fmt"
 )
 
@@ -16,8 +19,15 @@ func main() {
 	}
 
 	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.Product{})
+	db.AutoMigrate(&model.Customer{})
+	db.AutoMigrate(&model.Transaction{})
+	db.AutoMigrate(&model.TransactionDetails{})
 
 	var auth = auth.AuthSystem{DB: db}
+	var product = product.AuthSystem{DB: db}
+	var customer = customer.AuthSystem{DB: db}
+	var transaction = transaction.AuthSystem{DB:db}
 	for{
 		fmt.Println("1. Login")
 		fmt.Println("9. Exit")
@@ -26,9 +36,10 @@ func main() {
 			break
 		}else if inputMenu == 1{
 			var inputDashboard int
-			userLogin, permit := auth.Login()
-			if permit {
-				for{
+			userLogin, permitLogin := auth.Login()
+			if permitLogin {
+				fmt.Println(permitLogin)
+				for permitLogin{
 					fmt.Println("========Dasboard========")
 					fmt.Println("1. Input Barang")
 					fmt.Println("2. Edit Barang")
@@ -42,12 +53,26 @@ func main() {
 					fmt.Print("Masukkan pilihan: ")
 					fmt.Scanln(&inputDashboard)
 					if inputDashboard == 9 {
-						permit = false
+						permitLogin = false
+					}else if inputDashboard == 1{
+						result, permit := product.Add(userLogin.ID)
+						if permit {
+							fmt.Println(result)
+						}
 					}else if inputDashboard == 8 && userLogin.Role == 2{
 						result, permit := auth.Register()
 						if permit {
 							fmt.Println(result)
 						}
+					}else if inputDashboard == 3{
+						result, permit := customer.Add(userLogin.ID)
+						if permit {
+							fmt.Println(result)
+						}
+					}else if inputDashboard == 2{
+						product.Update()
+					}else if inputDashboard == 4{
+						transaction.Add(userLogin.ID)
 					}
 				}
 			}
